@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta author="OverHash">
+	<meta keywords="overhash, net, url, shortener, ads, free, fast">
+	<meta description="A free url shortener without ads by OverHash, a programmer!">
+
+	<meta propety="og:title" content="url-shorten">
+	<meta propety="og:type" content="website">
+	<meta propety="og:url" content="http://s.overhash.net/">
+	<meta propety="og:description" content="A free url shortener without ads by OverHash, a programmer!">
+
+	<title>OverHash</title>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+	<h1>URL Shortner Generator</h1>
+
+	<form id="createShortLinkForm">
+		Long Link:<br>
+		<input type="text" name="longLink" id="longLink" value="https://www.google.com"><br>
+		Short code link (leave blank to generate random)<br>
+		<input type="text" name="shortLink" id="shortLink" value="example"><br><br>
+  		<input type="submit" value="Submit" id="submit">
+	</form>
+
+	<p id="response"></p>
+
+	<script>
+		const copyToClipboard = str => {
+			const el = document.createElement('textarea');
+			el.value = str;
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+		};
+
+		$('#createShortLinkForm').submit(function(event) {
+			event.preventDefault(); // Stops browser from navigating away from page
+
+			const data = {};
+			data['shortLink'] = document.getElementById("shortLink").value;
+			data['longLink'] = document.getElementById("longLink").value;
+
+			console.log(data);
+
+			$.post('http://overhash.net:8880', data, function(resp) {
+				if (resp.statusCode === 200) {
+				copyToClipboard(resp['shortURL'])
+					document.getElementById('response').innerHTML = `SUCCESS! The URL you generated it <a href="${resp['shortURL']}}"">${resp['shortURL']}</a>`
+				} else if (resp.statusCode === 400) {
+					document.getElementById('response').innerText = resp['errorMessage']
+				}
+
+				console.log(resp)
+			});
+		});
+	</script>
+</body>
+
+</html>
