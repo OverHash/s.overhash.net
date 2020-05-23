@@ -52,7 +52,7 @@
 
 			$.post('http://overhash.net:8880', data, function(resp) {
 				if (resp.statusCode === 200) {
-				copyToClipboard(resp['shortURL'])
+					copyToClipboard(resp['shortURL'])
 					document.getElementById('response').innerHTML = `SUCCESS! The URL you generated it <a href="${resp['shortURL']}}"">${resp['shortURL']}</a>`
 				} else if (resp.statusCode === 400) {
 					document.getElementById('response').innerText = resp['errorMessage']
